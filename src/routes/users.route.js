@@ -19,14 +19,14 @@ router.get('/', expressYupMiddleware({ schemaValidator: usersSchema.listsUser })
 });
 
 
-router.post('/:userId/borrow/:bookId', expressYupMiddleware({ schemaValidator: borrowsSchema.editBorrow }), async (req, res) => {
+router.post('/:userId/borrow/:bookId',cleanAdd, expressYupMiddleware({ schemaValidator: borrowsSchema.editBorrow }), async (req, res) => {
     const { userId, bookId } = req.params;
     
     const userResponse = await usersService.borrow({ user_id: userId, book_id: bookId})
     return res.status(userResponse.status).json({ data: userResponse.data, error: userResponse.error });
 });
 
-router.post('/:userId/return/:bookId', expressYupMiddleware({ schemaValidator: borrowsSchema.returnBorrow }), async (req, res) => {
+router.post('/:userId/return/:bookId', cleanAdd,expressYupMiddleware({ schemaValidator: borrowsSchema.returnBorrow }), async (req, res) => {
     const { userId, bookId } = req.params;
     const { score } = req.body;
     const userResponse = await usersService.returnIt({ user_id: userId, book_id: bookId, score })
